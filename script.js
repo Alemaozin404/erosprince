@@ -14,12 +14,42 @@ const App = {
     },
     state: {
         isDarkTheme: true,
+        selectedTheme: 'romantic',
         files: { audio: null, photo: null },
         likes: 0,
         hasLiked: false,
         views: 0
     }
 };
+
+// ========================================
+// 🎨 SELEÇÃO DE TEMA
+// ========================================
+function selectTheme(themeName) {
+    App.state.selectedTheme = themeName;
+    
+    document.querySelectorAll('.theme-option').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const selectedBtn = document.querySelector('[data-theme="' + themeName + '"]');
+    if (selectedBtn) {
+        selectedBtn.classList.add('active');
+    }
+    
+    const themeNames = {
+        romantic: 'Romântico',
+        festive: 'Festas',
+        elegant: 'Elegante',
+        nature: 'Natureza',
+        ocean: 'Oceano',
+        sunset: 'Pôr do Sol'
+    };
+    
+    showToast('Tema ' + themeNames[themeName] + ' selecionado! 🎨', 'success');
+}
+
+window.selectTheme = selectTheme;
 
 // ========================================
 // 🚀 INICIALIZAÇÃO
@@ -165,6 +195,7 @@ function collectFormData() {
         date: document.getElementById('date').value,
         audio: App.state.files.audio,
         photo: App.state.files.photo,
+        theme: App.state.selectedTheme,
         likes: [
             document.getElementById('like1').value,
             document.getElementById('like2').value,
@@ -186,9 +217,10 @@ function generateShareableLink(formData) {
     if (formData.link) params.set('link', formData.link);
     if (formData.date) params.set('date', formData.date);
     if (formData.youtube) params.set('youtube', formData.youtube);
+    if (formData.theme) params.set('theme', formData.theme);
     
     formData.likes.forEach((like, index) => {
-        if (like) params.set(`like${index + 1}`, like);
+        if (like) params.set('like' + (index + 1), like);
     });
 
     // Processar arquivos
@@ -199,7 +231,7 @@ function generateShareableLink(formData) {
         params.set('photo', formData.photo);
     }
 
-    return `${baseUrl}?${params.toString()}`;
+    return baseUrl + '?' + params.toString();
 }
 
 function displayResult(url) {
@@ -322,10 +354,7 @@ function addFileToList(filename, type) {
     
     const fileItem = document.createElement('div');
     fileItem.className = 'file-item';
-    fileItem.innerHTML = `
-        <span>${icon} ${filename}</span>
-        <i class="fas fa-times remove-file" onclick="removeFile('${type}')"></i>
-    `;
+    fileItem.innerHTML = '<span>' + icon + ' ' + filename + '</span><i class="fas fa-times remove-file" onclick="removeFile(\'' + type + '\')"></i>';
     
     fileList.appendChild(fileItem);
 }
@@ -476,12 +505,7 @@ function updatePreview() {
     if (occasion || message) {
         preview.style.display = 'block';
         
-        content.innerHTML = `
-            <h2>${escapeHtml(occasion)}</h2>
-            ${recipient ? `<p><strong>Para:</strong> ${escapeHtml(recipient)}</p>` : ''}
-            ${sender ? `<p><em>De: ${escapeHtml(sender)}</em></p>` : ''}
-            <p>${escapeHtml(message.substring(0, 100))}${message.length > 100 ? '...' : ''}</p>
-        `;
+        content.innerHTML = '<h2>' + escapeHtml(occasion) + '</h2>' + (recipient ? '<p><strong>Para:</strong> ' + escapeHtml(recipient) + '</p>' : '') + (sender ? '<p><em>De: ' + escapeHtml(sender) + '</em></p>' : '') + '<p>' + escapeHtml(message.substring(0, 100)) + (message.length > 100 ? '...' : '') + '</p>';
     } else {
         preview.style.display = 'none';
     }
@@ -501,6 +525,7 @@ function parseCelebrationData(params) {
         photo: params.get('photo'),
         youtube: params.get('youtube'),
         audio: params.get('audio'),
+        theme: params.get('theme') || 'romantic',
         likes: [
             params.get('like1'),
             params.get('like2'),
@@ -516,17 +541,30 @@ function showCelebrationDisplay(data) {
     formContainer.style.display = 'none';
     displayContainer.style.display = 'block';
 
+    // Aplicar tema personalizado
+    if (data.theme) {
+        displayContainer.classList.add('theme-' + data.theme);
+        
+        // Aplicar fundo temático ao body
+        document.body.classList.add('theme-background-' + data.theme);
+        
+        // Adicionar decoração temática
+        const decoration = document.createElement('div');
+        decoration.className = 'theme-decoration';
+        displayContainer.insertBefore(decoration, displayContainer.firstChild);
+    }
+
     // Título
     document.getElementById('occasion-title').textContent = data.occasion;
 
     // Destinatário
     if (data.recipient) {
-        document.getElementById('recipient-text').textContent = `Para: ${escapeHtml(data.recipient)}`;
+        document.getElementById('recipient-text').textContent = 'Para: ' + escapeHtml(data.recipient);
     }
 
     // Remetente
     if (data.sender) {
-        document.getElementById('sender-text').textContent = `De: ${escapeHtml(data.sender)}`;
+        document.getElementById('sender-text').textContent = 'De: ' + escapeHtml(data.sender);
     }
 
     // Mensagem
@@ -541,30 +579,20 @@ function showCelebrationDisplay(data) {
             month: 'long',
             day: 'numeric'
         });
-        dateElement.textContent = `📅 ${capitalizeFirst(formattedDate)}`;
+        dateElement.textContent = '📅 ' + capitalizeFirst(formattedDate);
         dateElement.style.display = 'inline-block';
     }
 
     // Link
     if (data.link) {
         const linkElement = document.getElementById('link-text');
-        linkElement.innerHTML = `
-            <a href="${escapeHtml(data.link)}" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-external-link-alt"></i>
-                ${truncateUrl(data.link)}
-            </a>
-        `;
+        linkElement.innerHTML = '<a href="' + escapeHtml(data.link) + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-external-link-alt"></i> ' + truncateUrl(data.link) + '</a>';
     }
 
     // Likes
     if (data.likes && data.likes.length > 0) {
         const likesElement = document.getElementById('likes-text');
-        likesElement.innerHTML = `
-            <h3>Coisas que eu gosto em você</h3>
-            <ul>
-                ${data.likes.map(like => `<li>${escapeHtml(like)}</li>`).join('')}
-            </ul>
-        `;
+        likesElement.innerHTML = '<h3>Coisas que eu gosto em você</h3><ul>' + data.likes.map(like => '<li>' + escapeHtml(like) + '</li>').join('') + '</ul>';
     }
 
     // Foto
@@ -597,17 +625,7 @@ function showCelebrationDisplay(data) {
 function embedYouTubePlayer(videoId) {
     const playerContainer = document.getElementById('youtube-player');
     
-    playerContainer.innerHTML = `
-        <div class="youtube-container">
-            <iframe 
-                src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1"
-                title="Música da Celebração"
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-            </iframe>
-        </div>
-    `;
+    playerContainer.innerHTML = '<div class="youtube-container"><iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1" title="Música da Celebração" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
     
     playerContainer.style.display = 'block';
 }
@@ -615,15 +633,7 @@ function embedYouTubePlayer(videoId) {
 function embedAudioPlayer(audioBase64) {
     const playerContainer = document.getElementById('audio-player');
     
-    playerContainer.innerHTML = `
-        <div class="audio-container">
-            <div class="audio-label">🎶 Música da Celebração</div>
-            <audio id="celebration-audio" controls autoplay>
-                <source src="${audioBase64}" type="audio/mpeg">
-                Seu navegador não suporta o elemento de áudio.
-            </audio>
-        </div>
-    `;
+    playerContainer.innerHTML = '<div class="audio-container"><div class="audio-label">🎶 Música da Celebração</div><audio id="celebration-audio" controls autoplay><source src="' + audioBase64 + '" type="audio/mpeg">Seu navegador não suporta o elemento de áudio.</audio></div>';
     
     playerContainer.style.display = 'block';
     
@@ -641,12 +651,12 @@ function loadLikesAndViews() {
     const id = btoa(window.location.href).substring(0, 20);
     
     // Carregar likes
-    const likes = localStorage.getItem(`likes_${id}`) || 0;
+    const likes = localStorage.getItem('likes_' + id) || 0;
     App.state.likes = parseInt(likes);
     document.getElementById('likeCount').textContent = App.state.likes;
     
     // Verificar se já liked
-    const hasLiked = localStorage.getItem(`hasLiked_${id}`);
+    const hasLiked = localStorage.getItem('hasLiked_' + id);
     if (hasLiked) {
         const btn = document.getElementById('likeBtn');
         btn.classList.add('liked');
@@ -654,7 +664,7 @@ function loadLikesAndViews() {
     }
 
     // Carregar visualizações
-    const views = localStorage.getItem(`views_${id}`) || 1;
+    const views = localStorage.getItem('views_' + id) || 1;
     App.state.views = parseInt(views);
     document.getElementById('viewCount').textContent = App.state.views;
 }
@@ -663,9 +673,9 @@ function incrementViews() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = btoa(window.location.href).substring(0, 20);
     
-    let views = parseInt(localStorage.getItem(`views_${id}`) || '0');
+    let views = parseInt(localStorage.getItem('views_' + id) || '0');
     views++;
-    localStorage.setItem(`views_${id}`, views.toString());
+    localStorage.setItem('views_' + id, views.toString());
 }
 
 function toggleLike() {
@@ -677,19 +687,19 @@ function toggleLike() {
         // Remover like
         App.state.likes = Math.max(0, App.state.likes - 1);
         btn.classList.remove('liked');
-        localStorage.setItem(`hasLiked_${id}`, '');
+        localStorage.setItem('hasLiked_' + id, '');
     } else {
         // Adicionar like
         App.state.likes++;
         btn.classList.add('liked');
-        localStorage.setItem(`hasLiked_${id}`, 'true');
+        localStorage.setItem('hasLiked_' + id, 'true');
         
         // Efeito de confete extra
         createSingleConfetti();
     }
     
     document.getElementById('likeCount').textContent = App.state.likes;
-    localStorage.setItem(`likes_${id}`, App.state.likes.toString());
+    localStorage.setItem('likes_' + id, App.state.likes.toString());
     
     showToast(App.state.hasLiked ? 'Like removido' : 'Obrigado pelo amor! ❤️', 'success');
 }
@@ -718,7 +728,7 @@ function copyLink() {
 function shareWhatsApp() {
     const linkInput = document.getElementById('link-output');
     const text = encodeURIComponent('Olha que mensagem linda! 🎉\n' + linkInput.value);
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+    window.open('https://wa.me/?text=' + text, '_blank');
 }
 
 function generateQRCode() {
@@ -782,12 +792,12 @@ function createElegantConfetti() {
     }, 800);
 }
 
-function createSingleConfetti(colors = null, shapes = null) {
+function createSingleConfetti(colors, shapes) {
     if (!colors) colors = ['#e91e63', '#ff6b9d', '#ffd700', '#4ecdc4', '#45b7d1'];
     if (!shapes) shapes = ['circle', 'square', 'star', 'ribbon'];
 
     const confetti = document.createElement('div');
-    confetti.className = `confetti ${shapes[Math.floor(Math.random() * shapes.length)]}`;
+    confetti.className = 'confetti ' + shapes[Math.floor(Math.random() * shapes.length)];
     confetti.style.left = Math.random() * 100 + 'vw';
     confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
     confetti.style.animationDelay = '0s';
@@ -806,7 +816,8 @@ function createSingleConfetti(colors = null, shapes = null) {
 // ========================================
 // 🍞 TOAST NOTIFICATIONS
 // ========================================
-function showToast(message, type = 'info') {
+function showToast(message, type) {
+    if (!type) type = 'info';
     const toast = document.getElementById('toast');
     const icon = toast.querySelector('.toast-icon');
     const msg = toast.querySelector('.toast-message');
@@ -818,8 +829,8 @@ function showToast(message, type = 'info') {
         info: 'fas fa-info-circle'
     };
     
-    toast.className = `toast ${type}`;
-    icon.className = `toast-icon ${icons[type]}`;
+    toast.className = 'toast ' + type;
+    icon.className = 'toast-icon ' + icons[type];
     msg.textContent = message;
     
     toast.classList.add('show');
@@ -851,7 +862,8 @@ function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function truncateUrl(url, maxLength = 35) {
+function truncateUrl(url, maxLength) {
+    if (!maxLength) maxLength = 35;
     if (url.length <= maxLength) return url;
     return url.substring(0, maxLength) + '...';
 }
