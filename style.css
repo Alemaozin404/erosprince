@@ -367,6 +367,92 @@ body {
     color: rgba(255, 255, 255, 0.4);
 }
 
+/* ========================================
+   🎨 SELETOR DE TEMA
+   ======================================== */
+.theme-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 10px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.theme-option:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+.theme-option.active {
+    border-color: var(--primary);
+    background: rgba(233, 30, 99, 0.2);
+    box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
+    color: white;
+}
+
+.theme-preview {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    transition: all var(--transition-normal);
+}
+
+.theme-option.active .theme-preview {
+    border-color: white;
+    transform: scale(1.1);
+}
+
+.theme-option:hover .theme-preview {
+    transform: scale(1.1);
+}
+
+/* Theme Preview Colors */
+.theme-preview.romantic {
+    background: linear-gradient(135deg, #e91e63 0%, #ff6b9d 50%, #f8bbd0 100%);
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+}
+
+.theme-preview.festive {
+    background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 50%, #a29bfe 100%);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.theme-preview.elegant {
+    background: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #dfe6e9 100%);
+    box-shadow: 0 4px 15px rgba(45, 52, 54, 0.4);
+}
+
+.theme-preview.nature {
+    background: linear-gradient(135deg, #00b894 0%, #55efc4 50%, #81ecec 100%);
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);
+}
+
+.theme-preview.ocean {
+    background: linear-gradient(135deg, #0984e3 0%, #74b9ff 50%, #a29bfe 100%);
+    box-shadow: 0 4px 15px rgba(9, 132, 227, 0.4);
+}
+
+.theme-preview.sunset {
+    background: linear-gradient(135deg, #e17055 0%, #fdcb6e 50%, #fab1a0 100%);
+    box-shadow: 0 4px 15px rgba(225, 112, 85, 0.4);
+}
+
 /* Media Inputs */
 .media-inputs {
     display: grid;
@@ -1342,4 +1428,333 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
+}
+
+/* ========================================
+   🎨 TEMAS PERSONALIZADOS DO CARTÃO
+   ======================================== */
+
+/* Tema Romântico */
+.display-card.theme-romantic {
+    --theme-primary: #e91e63;
+    --theme-secondary: #ff6b9d;
+    --theme-accent: #ffd700;
+    --theme-bg: linear-gradient(135deg, rgba(233, 30, 99, 0.2) 0%, rgba(255, 107, 157, 0.1) 100%);
+    --theme-glow: rgba(233, 30, 99, 0.4);
+}
+
+.display-card.theme-romantic::before {
+    background: radial-gradient(circle, rgba(233, 30, 99, 0.3) 0%, transparent 60%);
+}
+
+.display-card.theme-romantic .date-badge {
+    background: linear-gradient(135deg, #e91e63, #ff6b9d);
+}
+
+.display-card.theme-romantic .display-message {
+    border-left: 4px solid #e91e63;
+}
+
+.display-card.theme-romantic .action-share {
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+}
+
+.display-card.theme-romantic .likes-display li {
+    border-color: #e91e63;
+    background: linear-gradient(135deg, #fff0f5, #ffe4ec);
+}
+
+/* Tema Festas */
+.display-card.theme-festive {
+    --theme-primary: #ffd700;
+    --theme-secondary: #ff6b6b;
+    --theme-accent: #a29bfe;
+    --theme-bg: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 107, 107, 0.1) 100%);
+    --theme-glow: rgba(255, 215, 0, 0.4);
+}
+
+.display-card.theme-festive::before {
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 60%);
+}
+
+.display-card.theme-festive .date-badge {
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+}
+
+.display-card.theme-festive .display-message {
+    border-left: 4px solid #ffd700;
+}
+
+.display-card.theme-festive .action-share {
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+}
+
+.display-card.theme-festive .likes-display li {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, #fff9e6, #fff3cd);
+}
+
+/* Tema Elegante */
+.display-card.theme-elegant {
+    --theme-primary: #2d3436;
+    --theme-secondary: #636e72;
+    --theme-accent: #dfe6e9;
+    --theme-bg: linear-gradient(135deg, rgba(45, 52, 54, 0.3) 0%, rgba(99, 110, 114, 0.1) 100%);
+    --theme-glow: rgba(45, 52, 54, 0.4);
+}
+
+.display-card.theme-elegant::before {
+    background: radial-gradient(circle, rgba(45, 52, 54, 0.4) 0%, transparent 60%);
+}
+
+.display-card.theme-elegant .date-badge {
+    background: linear-gradient(135deg, #2d3436, #636e72);
+}
+
+.display-card.theme-elegant .display-message {
+    border-left: 4px solid #2d3436;
+}
+
+.display-card.theme-elegant .action-share {
+    background: linear-gradient(135deg, #2d3436, #636e72);
+}
+
+.display-card.theme-elegant .likes-display li {
+    border-color: #2d3436;
+    background: linear-gradient(135deg, #f5f6fa, #dfe6e9);
+}
+
+/* Tema Natureza */
+.display-card.theme-nature {
+    --theme-primary: #00b894;
+    --theme-secondary: #55efc4;
+    --theme-accent: #81ecec;
+    --theme-bg: linear-gradient(135deg, rgba(0, 184, 148, 0.2) 0%, rgba(85, 239, 196, 0.1) 100%);
+    --theme-glow: rgba(0, 184, 148, 0.4);
+}
+
+.display-card.theme-nature::before {
+    background: radial-gradient(circle, rgba(0, 184, 148, 0.3) 0%, transparent 60%);
+}
+
+.display-card.theme-nature .date-badge {
+    background: linear-gradient(135deg, #00b894, #55efc4);
+}
+
+.display-card.theme-nature .display-message {
+    border-left: 4px solid #00b894;
+}
+
+.display-card.theme-nature .action-share {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+}
+
+.display-card.theme-nature .likes-display li {
+    border-color: #00b894;
+    background: linear-gradient(135deg, #e8f8f5, #d1f2eb);
+}
+
+/* Tema Oceano */
+.display-card.theme-ocean {
+    --theme-primary: #0984e3;
+    --theme-secondary: #74b9ff;
+    --theme-accent: #a29bfe;
+    --theme-bg: linear-gradient(135deg, rgba(9, 132, 227, 0.2) 0%, rgba(116, 185, 255, 0.1) 100%);
+    --theme-glow: rgba(9, 132, 227, 0.4);
+}
+
+.display-card.theme-ocean::before {
+    background: radial-gradient(circle, rgba(9, 132, 227, 0.3) 0%, transparent 60%);
+}
+
+.display-card.theme-ocean .date-badge {
+    background: linear-gradient(135deg, #0984e3, #74b9ff);
+}
+
+.display-card.theme-ocean .display-message {
+    border-left: 4px solid #0984e3;
+}
+
+.display-card.theme-ocean .action-share {
+    background: linear-gradient(135deg, #0984e3, #6c5ce7);
+}
+
+.display-card.theme-ocean .likes-display li {
+    border-color: #0984e3;
+    background: linear-gradient(135deg, #ebf5fb, #d6eaf8);
+}
+
+/* Tema Pôr do Sol */
+.display-card.theme-sunset {
+    --theme-primary: #e17055;
+    --theme-secondary: #fdcb6e;
+    --theme-accent: #fab1a0;
+    --theme-bg: linear-gradient(135deg, rgba(225, 112, 85, 0.2) 0%, rgba(253, 203, 110, 0.1) 100%);
+    --theme-glow: rgba(225, 112, 85, 0.4);
+}
+
+.display-card.theme-sunset::before {
+    background: radial-gradient(circle, rgba(225, 112, 85, 0.3) 0%, transparent 60%);
+}
+
+.display-card.theme-sunset .date-badge {
+    background: linear-gradient(135deg, #e17055, #fdcb6e);
+}
+
+.display-card.theme-sunset .display-message {
+    border-left: 4px solid #e17055;
+}
+
+.display-card.theme-sunset .action-share {
+    background: linear-gradient(135deg, #e17055, #d63031);
+}
+
+.display-card.theme-sunset .likes-display li {
+    border-color: #e17055;
+    background: linear-gradient(135deg, #fef5e7, #fdebd0);
+}
+
+/* Decorações temáticas para o cabeçalho */
+.display-card .theme-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+.theme-romantic .theme-decoration {
+    background: linear-gradient(90deg, #e91e63, #ff6b9d, #e91e63);
+}
+
+.theme-festive .theme-decoration {
+    background: linear-gradient(90deg, #ffd700, #ff6b6b, #a29bfe, #ffd700);
+}
+
+.theme-elegant .theme-decoration {
+    background: linear-gradient(90deg, #2d3436, #636e72, #2d3436);
+}
+
+.theme-nature .theme-decoration {
+    background: linear-gradient(90deg, #00b894, #55efc4, #00b894);
+}
+
+.theme-ocean .theme-decoration {
+    background: linear-gradient(90deg, #0984e3, #74b9ff, #a29bfe);
+}
+
+.theme-sunset .theme-decoration {
+    background: linear-gradient(90deg, #e17055, #fdcb6e, #e17055);
+}
+
+/* Responsividade do seletor de tema */
+@media (max-width: 768px) {
+    .theme-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .theme-selector {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .theme-option {
+        padding: 10px 5px;
+    }
+    
+    .theme-preview {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .theme-option span:last-child {
+        font-size: 10px;
+    }
+}
+
+/* ========================================
+   🎨 FUNDO POR TEMA
+   ======================================== */
+body.theme-background-romantic {
+    background: linear-gradient(135deg, #2d0a1e 0%, #4a1942 50%, #1a1a2e 100%);
+}
+
+body.theme-background-festive {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d2a0a 50%, #3d2e00 100%);
+}
+
+body.theme-background-elegant {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 50%, #0d0d0d 100%);
+}
+
+body.theme-background-nature {
+    background: linear-gradient(135deg, #0a1f1a 0%, #134e4a 50%, #042f2e 100%);
+}
+
+body.theme-background-ocean {
+    background: linear-gradient(135deg, #0a1628 0%, #0c3d5c 50%, #062c54 100%);
+}
+
+body.theme-background-sunset {
+    background: linear-gradient(135deg, #1a0f0a 0%, #3d1f0a 50%, #2d1510 100%);
+}
+
+/* ========================================
+   ☀️ TEMA CLARO DA PÁGINA
+   ======================================== */
+[data-page-theme="light"] {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-solid: rgba(255, 255, 255, 0.95);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --dark: #1a1a2e;
+    --light: #ffffff;
+    --gray: #6c757d;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 50%, #d0d5db 100%) !important;
+}
+
+[data-page-theme="light"] .main-card,
+[data-page-theme="light"] .display-card,
+[data-page-theme="light"] .result-card,
+[data-page-theme="light"] .preview-card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+[data-page-theme="light"] .input-group input,
+[data-page-theme="light"] .input-group textarea {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1a1a2e !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-page-theme="light"] .input-group label {
+    color: #1a1a2e !important;
+}
+
+[data-page-theme="light"] .card-header h1,
+[data-page-theme="light"] .display-header h1 {
+    color: #1a1a2e !important;
+}
+
+[data-page-theme="light"] .card-header .subtitle {
+    color: #6c757d !important;
+}
+
+[data-page-theme="light"] .theme-toggle {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1a1a2e !important;
+}
+
+[data-page-theme="light"] .display-message {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #1a1a2e !important;
 }
