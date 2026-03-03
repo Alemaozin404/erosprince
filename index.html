@@ -87,19 +87,68 @@
                     </div>
                 </div>
 
+                <!-- Tema Personalizado -->
+                <div class="input-group">
+                    <label>
+                        <span class="icon">🎨</span> Tema da Mensagem
+                    </label>
+                    <div class="theme-selector">
+                        <button type="button" class="theme-option active" data-theme="romantic" onclick="selectTheme('romantic')">
+                            <span class="theme-preview romantic"></span>
+                            <span>Romântico</span>
+                        </button>
+                        <button type="button" class="theme-option" data-theme="festive" onclick="selectTheme('festive')">
+                            <span class="theme-preview festive"></span>
+                            <span>Festas</span>
+                        </button>
+                        <button type="button" class="theme-option" data-theme="elegant" onclick="selectTheme('elegant')">
+                            <span class="theme-preview elegant"></span>
+                            <span>Elegante</span>
+                        </button>
+                        <button type="button" class="theme-option" data-theme="nature" onclick="selectTheme('nature')">
+                            <span class="theme-preview nature"></span>
+                            <span>Natureza</span>
+                        </button>
+                        <button type="button" class="theme-option" data-theme="ocean" onclick="selectTheme('ocean')">
+                            <span class="theme-preview ocean"></span>
+                            <span>Oceano</span>
+                        </button>
+                        <button type="button" class="theme-option" data-theme="sunset" onclick="selectTheme('sunset')">
+                            <span class="theme-preview sunset"></span>
+                            <span>Pôr do Sol</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Arquivos Separados - Foto -->
                 <div class="input-group full-width">
                     <label>
-                        <span class="icon">📎</span> Arquivos
+                        <span class="icon">📷</span> Foto da Comemoração
                     </label>
-                    <div class="file-drop-zone" id="dropZone">
+                    <div class="file-drop-zone photo-zone" id="photoZone">
                         <div class="drop-content">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Arraste arquivos aqui ou clique para selecionar</p>
-                            <span>Foto (JPG, PNG) • Áudio (MP3)</span>
+                            <i class="fas fa-image"></i>
+                            <p>Clique ou arraste uma foto</p>
+                            <span>JPG, PNG (máx 10MB)</span>
+                        </div>
+                        <input type="file" id="photo" accept="image/*" hidden>
+                        <div class="file-list" id="photoList"></div>
+                    </div>
+                </div>
+
+                <!-- Arquivos Separados - Áudio -->
+                <div class="input-group full-width">
+                    <label>
+                        <span class="icon">🎵</span> Áudio (MP3)
+                    </label>
+                    <div class="file-drop-zone audio-zone" id="audioZone">
+                        <div class="drop-content">
+                            <i class="fas fa-music"></i>
+                            <p>Clique ou arraste um áudio</p>
+                            <span>MP3 (máx 10MB)</span>
                         </div>
                         <input type="file" id="audio" accept="audio/*" hidden>
-                        <input type="file" id="photo" accept="image/*" hidden>
-                        <div class="file-list" id="fileList"></div>
+                        <div class="file-list" id="audioList"></div>
                     </div>
                 </div>
 
@@ -240,6 +289,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script_fixed.js"></script>
 </body>
 </html>
